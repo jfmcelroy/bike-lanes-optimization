@@ -32,4 +32,9 @@ The objective function quantifies the goal.
 The decision variables allow every scenario to be 'plugged in to' the objective function. 
 The constraints make sure the values over which the decision variables range correspond to viable decisions. 
 
-A detailed explanation of the optimization setup used in this model can be found [here]().
+A detailed explanation of the optimization setup used in this model can be found in the model_mathematics file. 
+
+# Code
+
+This repository is linked to the code being used to solve the model.
+However, as of 2025-Feb-2, the code is still in the debugging process. 
