@@ -1,0 +1,202 @@
+\documentclass[12pt,letterpaper]{article}
+
+%_______________________________________________________________
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=10mm,
+ }
+%Original packages - must be in this order
+\usepackage{amsmath}
+\usepackage{tcolorbox}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+\usepackage{accents} 
+
+%My packages
+\usepackage{amsfonts}
+\usepackage{dsfont}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{multicol} % colors
+\usepackage{relsize}
+\usepackage{titlesec}
+\usepackage{parskip} % paragraph structure 
+\usepackage{biblatex} % bibliography 
+\addbibresource{refs.bib} %Imports bibliography file
+
+
+%_______________________________________________________________
+% Page setup
+%_______________________________________________________________
+
+%   \titleformat{\section}[runin]{\fontsize{12}{15pt}\selectfont\bfseries}	{\thesection.}{0.5em}{} 
+%   \titlespacing{\section}{0pc}{1.5ex plus .1ex minus .2ex}{1pc}
+
+%\pagestyle{fancy}
+\pagestyle{empty} % toggles page numbers
+\setlength{\headheight}{42pt}
+%\setlength{\parindent}{0pt} %set indent length
+  
+%_______________________________________________________________
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\lrangle}[1]{\langle #1 \rangle}
+\newcommand{\inv}{^{-1}}
+\newcommand{\Lra}{\Leftrightarrow}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\Ra}{\Rightarrow}
+\newcommand{\La}{\Leftarrow}
+\renewcommand{\l}{\left(}
+\renewcommand{\r}{\right)}
+%\newcommand{\qed}[0]{\hfill$\blacksquare$}
+\renewcommand{\o}[1]{\overline{#1}}
+\newcommand{\flag}{\textcolor{red}{*****}}
+\newcommand{\ds}[1]{\begin{color}{blue}#1\end{color}}
+
+%_______________________________________________________________
+%_______________________________________________________________
+%_______________________________________________________________
+%_______________________________________________________________
+%_______________________________________________________________
+
+\begin{document}
+
+\begin{center}
+	{\Large{\bf Lexington Bikes Optimization Model}}
+\end{center}
+
+\section{Introduction} 
+
+This document details the mathematical specifics of the optimization model used in this project. 
+
+At the most basic level, this model should give an answer the question ``Where are the best places to install new bike lanes?''. 
+
+In more detail, cycling infrastructure can be classified as low-stress or high-stress, see \cite{mti} and \cite{pfb}. 
+We model a city with network flow: people traveling from census blocks, through the bike network, to destinations. 
+We assume people want to bike exclusively on low-stress infrastructure, but must accept use of high-stress segments due to the car-centric design of many North American cities. 
+In this setup, we imagine a city has a budget to add new bicycle infrastructure, such as protected lanes, to existing roadway to convert high-stress segments to low-stress. 
+For each possible arrangement of newly low-stress infrastructure, we calculate total distance traveled and keep track of the configuration which resulted in the lowest total trip distance. 
+
+\section{Condensed Model}
+
+We must solve the following optimization problem: 
+\begin{align}
+    \text{minimize} \hspace{0.5cm}& w := \sum_{(i,j)\in A} d_{ij}x_{ij}+ \sum_{(i,j)\in A} (f-1)d_{ij}z_{ij},\label{eq:objective}\\
+    \text{subject to} \hspace{0.5cm}& \sum_{(n,j)\in A} x_{nj} - \sum_{(i,n)\in A} x_{in} = b_n, \quad \forall n \in N; \label{eq:netflow}\\
+    & z_{ij}\geq x_{ij}-Py_{ij} , \quad\forall (i,j)\in H; \label{eq:stress-logic}\\
+    & y_{ij} \leq y_{ji}, \quad\forall (i,j)\in H_2; \label{bi-directional upgrades} \\
+    & \sum_{(i,j)\in H_1} u_{ij}y_{ij} + \sum_{(i,j)\in H_2} v_{ij}y_{ij}\leq B; \label{eq:budget} \\
+    & x_{ij} \in \Z_{\geq 0}, \quad\forall (i,j) \in A \label{eq:integral_x} \\
+    & y_{ij} \in \{0,1\}, \quad \forall (i,j) \in H \label{eq:binary_y} \\
+    & z_{ij} \in \{0,1\}, \quad \forall (i,j) \in H \label{eq:binary_z}
+\end{align}
+
+Constraint \ref{eq:netflow} ensures that each node has the correct in- and out-flow. 
+Constraint \ref{eq:stress-logic} adds a penalty to the objective function in the case that a non-upgraded high stress arc is used, and relies on the assumption that no trip will make a loop, and hence no arc will have more than $P$ trips across it. 
+Constraint \ref{eq:budget} ensures that the money spent on upgrades will not exceed the total budget. 
+Constraint \ref{eq:integral_x} ensures that the number of trips is a nonnegative integer. 
+Constraint \ref{eq:binary_y} ensures that the upgrade status of high stress arcs is binary. 
+
+
+
+\section{Explanations}
+
+
+\subsection{Sets} 
+
+$N=$ set of nodes.
+
+$O = $ set of origins (census blocks) $\subset N$. Define a dummy origin node $o^*\in O$ that doesn't represent a census block, but rather is used to balance supply and demand between origin and destination nodes. 
+
+$D= $ set of destinations (amenities of a single type) $\subset N$.
+
+$A = $ set of arcs, of the form $(i,j)$ for $i,j\in N$.
+
+$L= $ set of low stress arcs $\subset A$.
+
+$H= $ set of high stress arcs $\subset A$.
+
+Note that $H$ and $L$ form a partition of $A$. 
+
+\subsection{Parameters}
+
+$d_{ij}=$ distance of arc $(i,j)$, for $(i,j)\in A$. 
+
+$p_n=$ population at origin node $n$, for $n\in O$. 
+
+$b_n=$ net flow at node $n$ $=$ (supply at $n$) $-$ (demand at $n$), for $n\in N$. In particular, define
+\begin{align*}
+    b_n &= \left\{\begin{array}{ll}
+        -P, & n=o^* \\
+        p_n, & n\in O  \\
+        %0, & n\in D \\
+        0 & \mbox{else}
+    \end{array}\right.  .
+\end{align*}
+where $o^*$ is a dummy node. 
+
+
+$P=\sum_{n\in O} p_n$ total population. (Note: This is redundant to adding up the supply at each origin node.)
+
+$u_{ij}=$ cost to upgrade arc $(i,j)\in H$ to become low stress, for $(i,j)$.
+
+$B=$ total budget.
+
+$f=$ the factor by which a low stress path would need to exceed a high stress route in order for someone to choose the shorter high stress route. Equivalently, we can say someone would be willing $f$ times further in order to stay on a low stress path. 
+
+\subsection{Decision Variables}
+
+$x_{ij}=$ number of trips on arc $(i,j)$, for $(i,j)\in A$. 
+
+$y_{ij}=\left\{\begin{array}{ll}
+    0, & (i,j) \mbox{ not upgraded to low stress} \\
+    1, & (i,j) \mbox{ upgraded to low stress}
+\end{array}\right. $ , for $(i,j)\in H$. 
+
+$z_{ij}=\left\{\begin{array}{ll}
+    0, & (i,j) \mbox{ not upgraded to low stress} \\
+    x_{ij}, & (i,j) \mbox{ upgraded to low stress}
+\end{array}\right. $ , for $(i,j)\in H$. 
+
+\subsection{Objective Function}
+
+Goal: Minimize the total trip distance, while including the penalty for using high stress arcs. 
+\[ \sum_{(i,j)\in A} d_{ij}x_{ij} + \sum_{(i,j)\in H} (f-1)d_{ij}z_{ij} .\]
+
+\subsection{Constraints}
+
+Each arc $(i,j)\in A$ has a whole, nonnegative number of trips:
+\[ x_{ij}\in\Z_{\geq0} , \quad \forall (i,j)\in A. \]
+
+The flow must be balanced at each node $n\in N$. That is, the number of outgoing trips $-$ the number of incoming trips must equal the net flow:
+\[ \sum_{(n,j)\in A} x_{nj} - \sum_{(i,n)\in A} x_{in} = b_n , \quad \forall n\in N.\]
+
+Trips can use low stress arcs, or high stress arc that have been upgraded without penalty. 
+If a trip uses a high stress arc, it will incur a penalty in the objective function. 
+Assuming trips don't make loops, we get that $x_{ij}\leq P$ for all $(i,j)\in A$. 
+Using this, we can model the above constraint with the inequality with a `big $M$' constraint, where the total population $P$ serves as our $M$. 
+\[z_{ij}\geq x_{ij}-Py_{ij} , \quad \forall (i,j)\in H .\]
+
+Stay within budget:
+\[ \sum_{(i,j)\in H} u_{ij}y_{ij} \leq B. \]
+
+\section{Lexington}
+
+For simplicity, we begin with parks as the only destination type. 
+Additionally, we limited our data to the city's Urban Service Area.
+Further, the bike network data from \cite{pfb} has a handful of parking lots, golf course, etc. that are not connected to the larger network, and we removed these. 
+
+\printbibliography
+
+\end{document}
