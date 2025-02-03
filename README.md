@@ -10,4 +10,4 @@ The optimization model we produce gives a potential answer to the question "What
 The organization PeopleForBikes has classification criteria that groups bike routes in to high stress and low stress. 
 This theory of high- and low-stress networks is based on [work by Mekuria, Furth and Nixon](https://transweb.sjsu.edu/research/Low-Stress-Bicycling-and-Network-Connectivity).
 These criteria include things like speed limit and number of lanes. 
-They also have applied these criteria to many cities, including Lexington, pictured below.
+PeopleForBikes have applied these criteria to many cities, [including Lexington](https://bna.peopleforbikes.org/#/places/f12b7872-ac3a-47e8-9c24-f06774b0e2a0/).
