@@ -36,5 +36,5 @@ A detailed explanation of the optimization setup used in this model can be found
 
 # Code
 
-This repository is linked to the code being used to solve the model.
+This repository is linked to the code being used to solve the model (main_solver).
 However, as of 2025-Feb-2, the code is still in the debugging process. 
