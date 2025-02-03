@@ -21,6 +21,15 @@ In this model, this is equivalenet to changing a high-stress segment to low-stre
 
 # Flow
 
-The model uses a network flow setup, which imagines people `flowing' from origins to destinations.
+The model uses a network flow setup, which imagines people traveling as 'flow' from origins to destinations.
 In the first version of the Lexington model, we use US census blocks as origins and parks as destinations. 
 One could just as well use other amenities as destinations, (e.g. grocery stores, libraries, etc.). 
+
+# Optimization
+
+An optimization model requires three basic things: an objective fuction, decision variables, and constraints.
+The objective function quantifies the goal. 
+The decision variables allow every scenario to be 'plugged in to' the objective function. 
+The constraints make sure the values over which the decision variables range correspond to viable decisions. 
+
+A detailed explanation of the optimization setup used in this model can be found [here]().
