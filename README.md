@@ -10,6 +10,7 @@ The optimization model we produce seeks to answer to the question "What are the 
 # Authors
 
 [James Ford McElroy](https://sites.google.com/view/jamesfordmcelroy) is a mathematics Ph.D. student at the University of Kentucky in Lexington, interested in transportation justice. 
+
 [Dr. Daphne Skipper](https://sites.google.com/usna.edu/daphneskipper) is an Associate Professor at the U.S. Naval Academy and an expert in optimization. 
 
 # Stress
