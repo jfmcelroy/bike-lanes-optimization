@@ -1,13 +1,15 @@
 # bike-lanes-optimization
 
-Riding bikes is a crucial piece of a larger transportation sustainability puzzle. 
+Riding bikes is a crucial piece of a larger transportation sustainability puzzle.
+Bikes are significantly more energy-efficient than automobiles, and don't require fossil fuels for use. 
+Other advantages include financial accessibility, relative ease of maintenence, health benefits, to name a few.  
 In cities with car-prioritizing infrastructure (e.g. most US cities, including Lexington, KY), choosing bike routes that feel safe can involve considerable detours. 
 Fortunately, many cities have begun retrofitting car-centric infrastructure with more bike-friendly features. 
 The optimization model we produce seeks to answer to the question "What are the best roads on which to build bike-friendly infrastructure to minimize the amount of safety-detouring?" 
 
 # Authors
 
-[James Ford McElroy](https://sites.google.com/view/jamesfordmcelroy) is a Ph.D. student at the University of Kentucky in Lexington, studying mathematics and interested in transportation justice. 
+[James Ford McElroy](https://sites.google.com/view/jamesfordmcelroy) is a mathematics Ph.D. student at the University of Kentucky in Lexington, interested in transportation justice. 
 [Dr. Daphne Skipper](https://sites.google.com/usna.edu/daphneskipper) is an Associate Professor at the U.S. Naval Academy and an expert in optimization. 
 
 # Stress
