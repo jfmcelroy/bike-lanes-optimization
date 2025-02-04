@@ -5,6 +5,11 @@ In cities with car-prioritizing infrastructure (e.g. most US cities, including L
 Fortunately, many cities have begun retrofitting car-centric infrastructure with more bike-friendly features. 
 The optimization model we produce seeks to answer to the question "What are the best roads on which to build bike-friendly infrastructure to minimize the amount of safety-detouring?" 
 
+# Authors
+
+[James Ford McElroy](https://sites.google.com/view/jamesfordmcelroy) is a Ph.D. student at the University of Kentucky in Lexington, studying mathematics and interested in transportation justice. 
+[Dr. Daphne Skipper](https://sites.google.com/usna.edu/daphneskipper) is an Associate Professor at the U.S. Naval Academy and an expert in optimization. 
+
 # Stress
 
 The organization [PeopleForBikes](https://www.peopleforbikes.org/) has classification criteria that groups bike routes into high stress and low stress segments, detailed [here](https://cityratings.peopleforbikes.org/about/methodology).
